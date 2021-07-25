@@ -1,0 +1,133 @@
+#!/bin/bash
+
+echo "It's a chit-sheet for bash commands"
+
+# single line comment
+<<COMMENTS
+ multiline comment
+COMMENTS
+
+# Quotes represent single item. For strings '' and "" represent the same
+name="Tamal"
+type='PC'
+echo "it's $name's $type"
+
+# Command line arguments. $0 is script name, $@ is all args in an array, $1-$9 are the arguments etc.
+echo "Script name is $0, number of arguments $# and the user is $1"
+
+# Command substitution or executing commands ina batch script
+
+lsResult=`ls`
+pwdResult=$(pwd)
+
+echo "lsResult = $lsResult"
+echo "pwdResult = $pwdResult"
+
+# Reading input. -p is same promt, -sp silent mode, -a read array.
+
+read -p "username: " username
+read -sp "password: " password
+echo
+echo "Enter the items: "
+read -a items
+echo "Item 1 ${items[0]} and item 2 ${items[1]}"
+
+# Sleep is used to provide delay, suffix s/m/h/d are used.
+echo "Going to sleep for 3 secs"
+sleep 3s
+echo "I am back!"
+
+# Arithmatic op can be perfomed using $(()), let and backstick(`expr `)
+a=5
+b=4
+c=7
+sum=$((a+b+c))
+echo "(()) example sum: $sum"
+let "d = $((sum - 10))"
+echo "let example d: $d"
+echo "backstic example: `expr $a + $b - $c`"
+
+# Coditional statements(if, elif, else)
+read -p "Enter number of equity: " eq
+
+if [ $eq -gt 65 ] && [ $eq -lt 85 ];
+then
+echo "you are eligible for 30% discount"
+	if [ $eq == 69 ];
+	then
+	echo "you are our lucky winner!"
+	fi
+elif [ $eq -gt 50 ] && [ $eq -lt 65 ];
+then
+echo "you are eligible for 15% discount"
+else
+echo "no discount"
+fi
+
+# For loops exmple. Continue and break can be used like normal.
+for ((i=0; i<5; i++));
+do
+	if [ $i -eq 3 ]; then
+		echo "skipping 3"
+		continue
+	fi
+	echo "Current number : $i"
+done
+
+string="This is a string"
+for i in $string;
+do
+	echo $i
+done
+
+arr=("This" "is" "an" "array")
+for i in "${arr[@]}";
+do
+	echo $i
+done
+
+for num in {7..3..1};
+do
+	echo $num
+done
+
+# While loop example
+read -p "Enter starting number : " snum
+read -p "Enter ending number : " enum
+while [[ snum -lt enum ]];
+do
+	echo "Current number: " $snum
+	((snum++))
+done
+
+# Bash until(need FALSE to execute) loop example
+until [[ snum -gt `expr enum+3` ]];
+do
+	echo "Current number from until loop : $snum"
+	((snum++))
+done
+
+# Bash function example
+a="global"
+get_sum () {
+	echo $a
+	local a="local"
+	echo $a
+	((sum=$1+$2+$3))
+	echo $sum
+	return $sum
+}
+result=$(get_sum 5 10 30)
+echo "get_sum returned: $result"
+
+# Array example
+declare -a example_array=("Java" "C" "C++" "Python")
+echo "Array size: ${#example_array[@]}"
+example_array[4]="Bash"
+echo "Array size: ${#example_array[@]}"
+echo "all elements: ${example_array[@]}"
+echo "3rd element: ${example_array[2]}"
+unset example_array
+
+
+
